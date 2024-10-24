@@ -1,0 +1,77 @@
+Table HubPatient {
+    PatientID bigint [primary key]  // Суррогатный ключ пациента
+    PatientNaturalKey varchar(50)   // Естественный бизнес-ключ (например, идентификатор пациента)
+    LoadDateTime timestamp          // Время загрузки данных
+    RecordSource varchar(50)        // Источник данных
+}
+
+Table HubDoctor {
+    DoctorID bigint [primary key]  // Суррогатный ключ врача
+    DoctorNaturalKey varchar(50)   // Естественный бизнес-ключ (например, номер лицензии врача)
+    LoadDateTime timestamp         // Время загрузки данных
+    RecordSource varchar(50)       // Источник данных
+}
+
+Table HubVisit {
+    VisitID bigint [primary key]   // Суррогатный ключ визита
+    VisitNaturalKey varchar(50)    // Естественный бизнес-ключ (например, номер визита)
+    LoadDateTime timestamp         // Время загрузки данных
+    RecordSource varchar(50)       // Источник данных
+}
+
+Table LinkPatientVisit {
+    PatientVisitLinkID bigint [primary key]  // Суррогатный ключ связи пациента и визита
+    PatientID bigint                         // Ссылка на хаб пациента
+    VisitID bigint                           // Ссылка на хаб визита
+    LoadDateTime timestamp                   // Время загрузки данных
+    RecordSource varchar(50)                 // Источник данных
+}
+
+Table LinkDoctorVisit {
+    DoctorVisitLinkID bigint [primary key]  // Суррогатный ключ связи врача и визита
+    DoctorID bigint                         // Ссылка на хаб врача
+    VisitID bigint                          // Ссылка на хаб визита
+    LoadDateTime timestamp                  // Время загрузки данных
+    RecordSource varchar(50)                // Источник данных
+}
+
+Table SatPatient {
+    PatientID bigint                        // Ссылка на хаб пациента
+    PatientName varchar(100)                // Имя пациента
+    DateOfBirth date                        // Дата рождения
+    Gender varchar(10)                      // Пол
+    Address varchar(200)                    // Адрес проживания
+    PhoneNumber varchar(20)                 // Контактный телефон
+    LoadDateTime timestamp                  // Время загрузки данных
+    RecordSource varchar(50)                // Источник данных
+}
+
+Table SatDoctor {
+    DoctorID bigint                         // Ссылка на хаб врача
+    DoctorName varchar(100)                 // Имя врача
+    Specialty varchar(100)                  // Специальность врача
+    LicenseNumber varchar(50)               // Номер лицензии
+    PhoneNumber varchar(20)                 // Контактный телефон врача
+    LoadDateTime timestamp                  // Время загрузки данных
+    RecordSource varchar(50)                // Источник данных
+}
+
+Table SatVisit {
+    VisitID bigint                          // Ссылка на хаб визита
+    VisitDate date                          // Дата визита
+    VisitType varchar(50)                   // Тип визита (например, срочный, плановый)
+    Diagnosis varchar(200)                  // Диагноз, установленный при визите
+    TreatmentPlan text                      // План лечения
+    VisitOutcome varchar(50)                // Исход визита
+    LoadDateTime timestamp                  // Время загрузки данных
+    RecordSource varchar(50)                // Источник данных
+}
+
+Ref: LinkPatientVisit.PatientID > HubPatient.PatientID
+Ref: LinkPatientVisit.VisitID > HubVisit.VisitID
+Ref: LinkDoctorVisit.DoctorID > HubDoctor.DoctorID
+Ref: LinkDoctorVisit.VisitID > HubVisit.VisitID
+Ref: SatPatient.PatientID > HubPatient.PatientID
+Ref: SatDoctor.DoctorID > HubDoctor.DoctorID
+Ref: SatVisit.VisitID > HubVisit.VisitID
+
